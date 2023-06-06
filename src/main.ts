@@ -1,8 +1,5 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { install } from 'source-map-support';
+import { api } from './config';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
-}
-bootstrap();
+install();
+api.subscribe(() => console.log('API is running => http://localhost:3000/'));
