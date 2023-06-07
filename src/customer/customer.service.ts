@@ -3,6 +3,8 @@ import { ICustomer } from '@/typings';
 import Redis from 'ioredis';
 import * as uuid from 'uuid';
 
+const host = process.env.REDIS_HOST || 'localhost';
+
 const defaultRedisError = () => {
   throw new HttpException('Redis is Unavailable', 502);
 };
@@ -10,6 +12,7 @@ const defaultRedisError = () => {
 @Injectable()
 export class CustomerService {
   private readonly redis = new Redis({
+    host,
     connectTimeout: 2000,
     commandTimeout: 2000,
     disconnectTimeout: 2000,
