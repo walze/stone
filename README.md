@@ -1,31 +1,32 @@
 # Stone Test API
 
+## Docker setup
+
+```bash
+$ docker compose up
+```
+
 ## Non-docker setup
 
----
-
-## Installation
+### Installation
 
 ```bash
 $ pnpm install
 ```
 
-## Running the app
+### Running the app
 
 ```bash
-# development
-$ pnpm run start
-
 # watch mode
-$ pnpm run start:dev
+$ pnpm start:debug
 ```
 
-## Test
+### Test
 
 ```bash
 # unit tests
-$ pnpm run test
+$ pnpm test
 
 # e2e tests
-$ pnpm run test:e2e
+$ pnpm test:e2e
 ```
