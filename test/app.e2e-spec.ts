@@ -15,10 +15,22 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('should be unauthorised', () => {
+    return request(app.getHttpServer()).get('/').expect(401);
+  });
+
+  it('should login', () => {
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .post('/auth')
+      .send({ username: 'testing' })
+      .expect(201)
+      .expect((r) => expect(r.body.access_token).toBeDefined())
+      .then(({ body: { access_token } }) =>
+        request(app.getHttpServer())
+          .get('/')
+          .set('Authorization', `Bearer ${access_token}`)
+          .expect(200)
+          .expect('Hello World!'),
+      );
   });
 });

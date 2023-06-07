@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { ICustomer } from '@typings';
+import { ICustomer } from '@/typings';
 import Redis from 'ioredis';
 import * as uuid from 'uuid';
 
-const redis = new Redis();
-
 @Injectable()
 export class CustomerService {
+  private readonly redis = new Redis();
+
   async save(document: number, name: string) {
     const id = uuid.v4();
     const customer = { id, document, name };
 
-    await redis.set(`customer:${id}`, JSON.stringify(customer));
+    await this.redis.set(`customer:${id}`, JSON.stringify(customer));
 
     return customer;
   }
 
   async get(id: string) {
-    const customer = await redis.get(`customer:${id}`);
+    const customer = await this.redis.get(`customer:${id}`);
     if (!customer) return null;
 
     return JSON.parse(customer);
@@ -29,7 +29,7 @@ export class CustomerService {
 
     const updatedCustomer = { ...customer, document, name };
 
-    await redis.set(`customer:${id}`, JSON.stringify(updatedCustomer));
+    await this.redis.set(`customer:${id}`, JSON.stringify(updatedCustomer));
 
     return updatedCustomer;
   }

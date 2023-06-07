@@ -50,4 +50,14 @@ describe('CustomerController', () => {
       name: 'Jane Doe',
     });
   });
+
+  it('should not update a customer if it does not exist', async () => {
+    const customerUpdated = await controller.update(
+      'non-existent-id',
+      987654321,
+      'Jane Doe',
+    );
+
+    expect(customerUpdated).toBeNull();
+  });
 });
