@@ -1,6 +1,6 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { from, tap } from 'rxjs';
 import { AppModule } from './app.module';
@@ -20,4 +20,5 @@ export const setupSwagger = (app: INestApplication) => {
 export const api = from(NestFactory.create(AppModule)).pipe(
   tap(setupSwagger),
   tap((app) => app.listen(3000)),
+  tap((app) => app.useGlobalPipes(new ValidationPipe())),
 );

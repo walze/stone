@@ -1,5 +1,10 @@
 import * as jwksClient from 'jwks-rsa';
-import { GetPublicKeyOrSecret, decode, verify as v } from 'jsonwebtoken';
+import {
+  GetPublicKeyOrSecret,
+  JwtPayload,
+  decode,
+  verify as v,
+} from 'jsonwebtoken';
 
 const fetchJwksUri = (issuer: string) =>
   fetch(`${issuer}/.well-known/openid-configuration`)
@@ -15,14 +20,14 @@ const getKey =
         callback(null, key.getPublicKey());
       });
 
-export const verify = async (token: string) => {
-  const { iss } = decode(token) as Record<string, string>;
+export const verify = async (token: string): Promise<boolean> => {
+  const { iss } = decode(token, { complete: true }).payload as JwtPayload;
+
   const jwksUri = await fetchJwksUri(iss);
 
   return new Promise((rs, rj) =>
-    v(token, getKey(jwksUri), { algorithms: ['RS256'] }, (err, decoded) => {
-      if (err) return rj(err);
-      return rs(decoded);
-    }),
+    v(token, getKey(jwksUri), { algorithms: ['RS256'] }, (err) =>
+      err ? rj(false) : rs(true),
+    ),
   );
 };

@@ -1,16 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { lastValueFrom, map, mergeMap, tap } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { verify } from './verify';
-
-// body
-// grant_type=client_credentials
-// client_id=customers
-// client_secret=453000f7-47a0-4489-bc47-891c742650e2
-// username=<seu_email>
-// password=<base64_de_seu_email>
-// scope=openid
-// Content-Type: application/x-www-form-urlencoded
 
 export const base64 = (str: string) => Buffer.from(str).toString('base64');
 
@@ -38,18 +28,13 @@ export const auth = (username: string) =>
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
-    const token = req.headers.authorization.replace('Bearer ', '');
+    const token = req.headers.authorization.split(' ')[1];
     if (!token) return false;
 
-    const isValid = auth('wallacefares').pipe(
-      mergeMap((res) => res.json()),
-      map((res) => res.access_token as string),
-      map((_) => verify(token) && true),
-      tap((res) => console.log(res, 123)),
-    );
+    const isValid = await verify(token);
 
-    return lastValueFrom(isValid);
+    return isValid;
   }
 }
