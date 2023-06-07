@@ -7,3 +7,9 @@ export interface IAuthResponse {
   scope: string;
   token_type: string;
 }
+
+export interface ICustomer {
+  id: string;
+  document: number;
+  name: string;
+}

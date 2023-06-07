@@ -32,7 +32,8 @@
     "jsonwebtoken": "^9.0.0",
     "jwks-rsa": "^3.0.1",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.5.0",
@@ -72,6 +73,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/../src/$1"
+    }
   }
 }
