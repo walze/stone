@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpException,
   Param,
   Post,
   Put,
@@ -16,6 +18,7 @@ export class CustomerController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @HttpCode(201)
   save(@Body('document') document: number, @Body('name') name: string) {
     return this.customerService.save(document, name);
   }
@@ -23,7 +26,10 @@ export class CustomerController {
   @Get(':id')
   @UseGuards(AuthGuard)
   get(@Param('id') id: string) {
-    return this.customerService.get(id);
+    const c = this.customerService.get(id);
+    if (!c) throw new HttpException('Not found', 404);
+
+    return c;
   }
 
   @Put(':id')
