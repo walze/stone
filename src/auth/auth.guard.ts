@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { fromFetch } from 'rxjs/fetch';
 import { verify } from './verify';
+import { IAuthResponse } from 'src/typings';
 
 export const base64 = (str: string) => Buffer.from(str).toString('base64');
 
@@ -11,7 +12,8 @@ const encode = (o: Record<string, string>) =>
   new URLSearchParams(Object.entries(o)).toString();
 
 export const auth = (username: string) =>
-  fromFetch(AUTH_API, {
+  fromFetch<IAuthResponse>(AUTH_API, {
+    selector: (res) => res.json(),
     method: 'POST',
     body: encode({
       grant_type: 'client_credentials',

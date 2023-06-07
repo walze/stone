@@ -1,15 +1,10 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './auth/auth.guard';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
-
-  @Post()
-  login(@Body('username') username: string) {
-    return this.appService.login(username);
-  }
 
   @Get()
   @UseGuards(AuthGuard)
