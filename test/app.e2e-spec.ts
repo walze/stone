@@ -22,6 +22,14 @@ describe('AppController (e2e)', () => {
       .then(() => done());
   });
 
+  it('should handle fake tokens', (done) => {
+    request(app.getHttpServer())
+      .get('/')
+      .set('Authorization', `Bearer ${Math.random()}`)
+      .expect(401)
+      .then(() => done());
+  });
+
   it('should login', (done) => {
     request(app.getHttpServer())
       .post('/auth')

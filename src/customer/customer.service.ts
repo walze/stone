@@ -48,4 +48,16 @@ export class CustomerService {
 
     return updatedCustomer;
   }
+
+  async all() {
+    const keys = await this.redis.keys('customer:*').catch(defaultRedisError);
+    if (!keys) return [];
+
+    const customers = await this.redis
+      .mget(keys)
+      .catch(defaultRedisError)
+      .then((customers) => customers.map((customer) => JSON.parse(customer)));
+
+    return customers as ICustomer[];
+  }
 }

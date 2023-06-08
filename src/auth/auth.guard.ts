@@ -42,7 +42,10 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    const isValid = await verify(token);
+    const isValid = await verify(token).catch(() => {
+      res.status(401).json({ message: 'Unauthorized' });
+      return false;
+    });
 
     return isValid;
   }
