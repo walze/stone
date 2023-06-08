@@ -21,7 +21,7 @@ const getKey =
       });
 
 export const verify = async (token: string): Promise<boolean> => {
-  const { iss } = decode(token, { complete: true }).payload as JwtPayload;
+  const { iss } = decode(token, { complete: true })?.payload as JwtPayload;
 
   const jwksUri = await fetchJwksUri(iss);
 
