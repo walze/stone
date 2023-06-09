@@ -1,5 +1,7 @@
 # Stone Test API
 
+Use `/api` for endpoint documentation.
+
 ## Docker setup
 
 ```bash
